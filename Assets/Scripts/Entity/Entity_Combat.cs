@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Entity_Combat : MonoBehaviour
 {
-
+    private Entity_VFX vfx;
     public float damage = 10;
 
     [Header("Target detection")]
@@ -10,6 +10,10 @@ public class Entity_Combat : MonoBehaviour
     [SerializeField] private float targetCheckRadius = 1;
     [SerializeField] private LayerMask whatIsTarget;
 
+    private void Awake()
+    {
+        vfx = GetComponent<Entity_VFX>();
+    }
 
     public void PerformAttack()
     {
@@ -18,7 +22,12 @@ public class Entity_Combat : MonoBehaviour
         {
             //giup detect ca player, enemy va chest
             IDamageable damageable = target.GetComponent<IDamageable>();
-            damageable?.TakeDamage(damage, transform); // if damageable != null => call TakeDamage
+
+            if (damageable == null)
+                continue;
+
+            damageable.TakeDamage(damage, transform); // if damageable != null => call TakeDamage
+            vfx.CreateOnHitVfx(target.transform);
 
             // Entity_Health targetHealth = target.GetComponent<Entity_Health>();
             // targetHealth?.TakeDamage(damage, transform);// if targetHealth != null => call TakeDamage

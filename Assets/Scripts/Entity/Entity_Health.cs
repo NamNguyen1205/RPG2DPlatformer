@@ -1,4 +1,5 @@
 using System.Security;
+using NUnit.Framework.Constraints;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,9 +8,9 @@ public class Entity_Health : MonoBehaviour, IDamageable
     private Entity_VFX entityVfx;
     private Entity entity;
     private Slider healthBar;
+    private Entity_Stats stats;
 
     [SerializeField] protected float currentHp;
-    [SerializeField] protected float maxHp = 100;
     [SerializeField] protected bool isDead;
     [Header("On Damage Knockback")]
     [SerializeField] private Vector2 knockbackPower = new Vector2(1.5f, 2.5f);
@@ -23,26 +24,44 @@ public class Entity_Health : MonoBehaviour, IDamageable
     {
         entityVfx = GetComponent<Entity_VFX>();
         entity = GetComponent<Entity>();
+        stats = GetComponent<Entity_Stats>();
         healthBar = GetComponentInChildren<Slider>();
 
-        currentHp = maxHp;
+        currentHp = stats.GetMaxHealth();
         UpdateHealthBar();
     }
 
-    public virtual void TakeDamage(float damage, Transform damageDealer)
+    public virtual bool TakeDamage(float damage, Transform damageDealer)
     {
         if (isDead)
-            return;
+            return false;
 
-        Vector2 knockback = CalculateKnockback(damage, damageDealer);
-        float duration = CalculateDuration(damage);
+        if (AttackEvaded())
+        {
+            Debug.Log($"{gameObject.name} evaded the attack");
+            return false;
+        }
+
+        Entity_Stats attackStats = damageDealer.GetComponent<Entity_Stats>();
+        float armorReduction = attackStats != null ? attackStats.GetArmorReduction() : 0;
+
+        float mitigation = stats.GetArmorMitigation(armorReduction);
+        float finalDamage = damage * (1 - mitigation);
+
+        Vector2 knockback = CalculateKnockback(finalDamage, damageDealer);
+        float duration = CalculateDuration(finalDamage);
 
         //knockback
         entity?.ReciveKnockback(knockback, duration);
         entityVfx?.PlayOnDamageVfx();
 
-        ReduceHp(damage);
+        ReduceHp(finalDamage);
+        Debug.Log("damage taken: " + finalDamage);
+        
+        return true;
     }
+
+    private bool AttackEvaded() => Random.Range(0, 100) < stats.GetEvasion();
 
     protected void ReduceHp(float damage)
     {
@@ -63,7 +82,7 @@ public class Entity_Health : MonoBehaviour, IDamageable
     {
         if (healthBar == null)
             return;
-        healthBar.value = currentHp / maxHp;
+        healthBar.value = currentHp / stats.GetMaxHealth();
     }
         
 
@@ -80,6 +99,6 @@ public class Entity_Health : MonoBehaviour, IDamageable
 
     private float CalculateDuration(float damage) => IsHeavyDamage(damage) ? heavyKnockbackDuration : knockbackDuration;
 
-    private bool IsHeavyDamage(float damage) => damage / maxHp > heavyDamageThreshold;
+    private bool IsHeavyDamage(float damage) => damage / stats.GetMaxHealth() > heavyDamageThreshold;
 
 }

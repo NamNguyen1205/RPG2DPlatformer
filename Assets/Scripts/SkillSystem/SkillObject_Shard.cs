@@ -1,8 +1,13 @@
+using System;
 using Unity.Mathematics;
 using UnityEngine;
 
 public class SkillObject_Shard : SkillObject_Base
 {
+    public event Action OnExplode;
+
+    private Skill_Shard shardManager;
+
     [SerializeField] private GameObject vfxPrefab;
 
     private Transform target;
@@ -23,17 +28,41 @@ public class SkillObject_Shard : SkillObject_Base
     }
 
     //eploxe sau 1 khoang time neu ko cham enemy
-    public void SetupShard(float detinationTime)
+    public void SetupShard(Skill_Shard shardManager)
     {
-        Invoke(nameof(Explode), detinationTime);
+        this.shardManager = shardManager;
+
+        playerStats = shardManager.player.stats;
+        damageScaleData = shardManager.damageScaleData;
+
+        float detonationTime = shardManager.GetDetonateTime();
+
+
+        Invoke(nameof(Explode), detonationTime);
     }
 
-    private void Explode()
+    public void SetupShard(Skill_Shard shardManager, float detonationTime, bool canMove, float shardSpeed)
+    {
+        this.shardManager = shardManager;
+
+        playerStats = shardManager.player.stats;
+        damageScaleData = shardManager.damageScaleData;
+
+
+        Invoke(nameof(Explode), detonationTime);
+
+        if (canMove)
+            MoveToWardsClosestTarget(shardSpeed);
+    }
+
+    public void Explode()
     {
         DamageEnemiesInRadius(transform, checkRadius);
 
-        Instantiate(vfxPrefab, transform.position, quaternion.identity);
+        GameObject vfx = Instantiate(vfxPrefab, transform.position, quaternion.identity);
+        vfx.GetComponentInChildren<SpriteRenderer>().color = shardManager.player.vfx.GetElementColor(usedElement);
 
+        OnExplode?.Invoke();
         Destroy(gameObject);
     }
 

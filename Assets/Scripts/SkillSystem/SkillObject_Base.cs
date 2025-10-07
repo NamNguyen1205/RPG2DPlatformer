@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SkillObject_Base : MonoBehaviour
@@ -5,6 +6,10 @@ public class SkillObject_Base : MonoBehaviour
     [SerializeField] protected LayerMask whatIsEnemy;
     [SerializeField] protected Transform targetCheck;
     [SerializeField] protected float checkRadius = 1;
+
+    protected Entity_Stats playerStats;
+    protected DamageScaleData damageScaleData;
+    protected ElementType usedElement;
 
     protected void DamageEnemiesInRadius(Transform t, float radius)
     {
@@ -15,7 +20,22 @@ public class SkillObject_Base : MonoBehaviour
             if (damageable == null)
                 continue;
 
-            damageable.TakeDamage(1, 1, ElementType.None, transform);
+            AttackData attackData = playerStats.GetAttackData(damageScaleData);
+            Entity_StatusHandler statusHandler = target.GetComponent<Entity_StatusHandler>();
+
+            // float physDamage = playerStats.GetPhysicalDamage(out bool isCrit, damageScaleData.physical);
+            // float elemDamage = playerStats.GetElementalDamage(out ElementType element, damageScaleData.elemental);
+            float physDamage = attackData.physicalDamage;
+            float elemDamage = attackData.elementalDamage;
+            ElementType element = attackData.element;
+
+
+            damageable.TakeDamage(physDamage, elemDamage, element, transform);
+
+            if (element != ElementType.None)
+                statusHandler.ApplyStatusEffect(element, attackData.effectData);
+
+            usedElement = element;
         }
     }
 

@@ -11,6 +11,8 @@ public class Player : Entity
     public PlayerInputSet input { get; private set; }
     public Player_SkillManager skillManager{ get; private set; }
     public Player_VFX vfx { get; private set; }
+    public Entity_Health health{ get; private set; }
+    public Entity_StatusHandler statusHandler { get; private set; }
 
 
     #region Stat Variable
@@ -25,6 +27,7 @@ public class Player : Entity
     public Player_JumpAttackState jumpAttackState { get; private set; }
     public Player_DeadState deadState { get; private set; }
     public Player_CounterAttackState counterAttackState { get; private set; }
+    public Player_SwordThrowState swordThrowState { get; private set; }
 
     #endregion
 
@@ -37,7 +40,6 @@ public class Player : Entity
 
 
     [Header("Movement Details")]
-    public Vector2 moveInput { get; private set; }
     public float moveSpeed;
     public float jumpForce = 5;
     public Vector2 wallJumpForce;
@@ -50,15 +52,20 @@ public class Player : Entity
     [Space]
     public float dashDuration = 0.25f;
     public float dashSpeed = 20;
+    public Vector2 moveInput { get; private set; }
+    public Vector2 mousePosition { get; private set; }
 
     protected override void Awake()
     {
         base.Awake();
 
         ui = FindAnyObjectByType<UI>();
-        input = new PlayerInputSet();
         skillManager = GetComponent<Player_SkillManager>();
         vfx = GetComponent<Player_VFX>();
+        statusHandler = GetComponent<Entity_StatusHandler>();
+        health = GetComponent<Entity_Health>();
+
+        input = new PlayerInputSet();
 
         idleState = new Player_idleState(this, stateMachine, "idle");
         moveState = new Player_moveState(this, stateMachine, "move");
@@ -71,6 +78,7 @@ public class Player : Entity
         jumpAttackState = new Player_JumpAttackState(this, stateMachine, "jumpAttack");
         deadState = new Player_DeadState(this, stateMachine, "dead");
         counterAttackState = new Player_CounterAttackState(this, stateMachine, "counterAttack");
+        swordThrowState = new Player_SwordThrowState(this, stateMachine, "swordThrow");
     }
 
     protected override void Start()
@@ -78,6 +86,8 @@ public class Player : Entity
         base.Start();
         stateMachine.Initialize(idleState);
     }
+
+    public void TeleportPlayer(Vector3 position) => transform.position = position;
 
     protected override IEnumerator SlowDownEntityCo(float duration, float slowMultiplier)
     {
@@ -129,6 +139,8 @@ public class Player : Entity
     {
         input.Enable();
 
+        input.Player.Mouse.performed += ctx => mousePosition = ctx.ReadValue<Vector2>();
+        
         input.Player.Movement.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
         input.Player.Movement.canceled += ctx => moveInput = Vector2.zero;
 

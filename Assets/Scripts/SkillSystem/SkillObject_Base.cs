@@ -1,15 +1,26 @@
+using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class SkillObject_Base : MonoBehaviour
 {
+    [SerializeField] private GameObject onhitVfx;
+
+    [Space]
     [SerializeField] protected LayerMask whatIsEnemy;
     [SerializeField] protected Transform targetCheck;
     [SerializeField] protected float checkRadius = 1;
 
+    protected Animator anim;
     protected Entity_Stats playerStats;
     protected DamageScaleData damageScaleData;
     protected ElementType usedElement;
+    protected bool targetGotHit;
+
+    protected virtual void Awake()
+    {
+        anim = GetComponentInChildren<Animator>();
+    }
 
     protected void DamageEnemiesInRadius(Transform t, float radius)
     {
@@ -30,10 +41,13 @@ public class SkillObject_Base : MonoBehaviour
             ElementType element = attackData.element;
 
 
-            damageable.TakeDamage(physDamage, elemDamage, element, transform);
+            targetGotHit = damageable.TakeDamage(physDamage, elemDamage, element, transform);
 
             if (element != ElementType.None)
                 statusHandler.ApplyStatusEffect(element, attackData.effectData);
+
+            if (targetGotHit)
+                Instantiate(onhitVfx, target.transform.position, quaternion.identity);
 
             usedElement = element;
         }

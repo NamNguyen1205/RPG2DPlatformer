@@ -18622,7 +18622,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: -400708786, guid: 2b5ddfa17e67d72479fca7ec093c227c, type: 3}
+  m_Sprite: {fileID: 1571295547, guid: 2b5ddfa17e67d72479fca7ec093c227c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -20476,7 +20476,7 @@ GameObject:
   - component: {fileID: 678031572}
   - component: {fileID: 678031571}
   m_Layer: 5
-  m_Name: UI_TreeNode - Mirror shard
+  m_Name: UI_TreeNode - The Xenablade
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20548,10 +20548,10 @@ MonoBehaviour:
   - {fileID: 2125133626}
   isUnlocked: 0
   isLocked: 0
-  skillData: {fileID: 11400000, guid: b7ed2e5e4f158cf4cb741477ac39563a, type: 2}
-  skillName: Skill data - Mirror shard
+  skillData: {fileID: 11400000, guid: 7e41e9a3f807e644e96195f4025e4078, type: 2}
+  skillName: Skill data - The Xenablade
   skillIcon: {fileID: 475030264}
-  skillCost: 3
+  skillCost: 2
   lockedColorHex: '#808080'
 --- !u!1 &680695326
 GameObject:
@@ -21874,16 +21874,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillType: 3
-  upgradeType: 12
+  upgradeType: 14
   cooldown: 0
-  throwPower: 3.86
   swordPrefab: {fileID: 7013638036049097985, guid: 7aa1ec61c8109b845a99d073dd18a795, type: 3}
+  regularThrowPower: 1.77
   pierceSwordPrefab: {fileID: 3190818503183672875, guid: e45fd7a9ef8a68042841afd7843a01fc, type: 3}
   amountToPierce: 2
+  pierceThrowPower: 6
   spinSwordPrefab: {fileID: 8664683649369241492, guid: f10a58d3240c47b46a687852ed48507c, type: 3}
   maxDistance: 5
   attackPersecond: 6
   maxSpinDuration: 3
+  spinThrowPower: 3.5
+  bounceSwordPerfab: {fileID: 6229344730679313545, guid: 54859fc33bf0692449388a205b9bb8a3, type: 3}
+  bounceCount: 5
+  bounceSpeed: 12
+  bounceThrowPower: 6
   perdictionDot: {fileID: 2432450846058614462, guid: 38444a030e6efc243bdf3b629a634bd1, type: 3}
   numberOfDots: 20
   spaceBetweenDots: 0.05

@@ -22,5 +22,17 @@ public enum SkillUpgradeType
     SwordThrow, // you can throw sword to damage enemies from range
     SwordThrow_Spin, // your sword will spin at one point and damage enemies. Like a chainsaw
     SwordThrow_Pierce, // Pierce sword will pierce N targets
-    SwordThrow_Bounce // Bounce sword will bounce between enemies
+    SwordThrow_Bounce, // Bounce sword will bounce between enemies
+
+    //--------------TIme Echo--------------
+    TimeEcho, //create a clone of player, It can take damage from enemies
+    TimeEcho_SingleAttack, // Time Echo can perform a single attack
+    TimeEcho_MultiAttack, //TIme Echo can perform N attacks
+    TimeEcho_ChanceToDuplicate, //TIme Echo has a chance to create another time echo when attacks
+
+    TimeEcho_HealWisp, // when thime echo dies it create a wips that flies towards the player to heal it.
+                       //heal is = to percantage of damage taken when died
+    TImeEcho_CleanseWisp, //Wisp will now remove negative effects from player   
+    TimeEcho_CooldownWisp,//Wisp will reduce cooldown of all skills by N second
+
 }

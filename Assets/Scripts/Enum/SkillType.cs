@@ -5,6 +5,7 @@ public enum SkillType
     Dash,
     TimeEcho,
     TimeShard,
-    SwordThrow
-    
+    SwordThrow,
+    DomainExpansion
+
 }

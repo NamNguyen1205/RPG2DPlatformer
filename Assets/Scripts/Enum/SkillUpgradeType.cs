@@ -35,4 +35,8 @@ public enum SkillUpgradeType
     TImeEcho_CleanseWisp, //Wisp will now remove negative effects from player   
     TimeEcho_CooldownWisp,//Wisp will reduce cooldown of all skills by N second
 
+    //----------Domain expansion-------------
+    Domain_SlowingDown, // create an area in which you slow down enemies by 90 - 100%. you can freely move and fight
+    Domain_EchoSpam, // you can no longer move, but you spam enemy with Time echo ability
+    Domain_ShardSpam, // yhouu can no longer move, but you spam enemy with time shard ability
 }

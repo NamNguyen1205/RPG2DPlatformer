@@ -20922,7 +20922,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &680695327
 RectTransform:
   m_ObjectHideFlags: 0
@@ -21820,7 +21820,7 @@ MonoBehaviour:
   skillData: {fileID: 11400000, guid: 2a28dbe465af30f4aaeac1550ddf2a41, type: 2}
   skillName: Skill data - Healing wisp
   skillIcon: {fileID: 2012311541}
-  skillCost: 2
+  skillCost: 3
   lockedColorHex: '#808080'
 --- !u!1 &774621316
 GameObject:
@@ -22205,10 +22205,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 142601637}
-  - {fileID: 1619914074}
-  - {fileID: 1035292580}
   - {fileID: 1532435750}
   - {fileID: 1352512787}
+  - {fileID: 1619914074}
+  - {fileID: 1035292580}
   m_Father: {fileID: 680695327}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -22229,6 +22229,7 @@ GameObject:
   - component: {fileID: 809871795}
   - component: {fileID: 809871796}
   - component: {fileID: 809871797}
+  - component: {fileID: 809871798}
   m_Layer: 7
   m_Name: Skill_Holder
   m_TagString: Untagged
@@ -22334,12 +22335,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillType: 1
-  upgradeType: 18
+  upgradeType: 19
   cooldown: 0
   timeEchoPrefab: {fileID: 4550778006570362975, guid: 8f52e658c80755945bc2abbfbb9b965f, type: 3}
   timeEchoDuration: 16
   maxAttack: 3
   duplicateChance: 0.6
+  damagePercentHealed: 0.3
+  cooldownReduceInSeconds: 0
+--- !u!114 &809871798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 809871792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88697aef38a75ef409fb974d141966e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillType: 4
+  upgradeType: 23
+  cooldown: 0
 --- !u!1 &821236323
 GameObject:
   m_ObjectHideFlags: 0
@@ -23607,12 +23625,12 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 311389687}
-  - {fileID: 758352216}
-  - {fileID: 1233458264}
-  - {fileID: 822703580}
-  - {fileID: 1209260683}
   - {fileID: 834056260}
   - {fileID: 45492331}
+  - {fileID: 822703580}
+  - {fileID: 1209260683}
+  - {fileID: 758352216}
+  - {fileID: 1233458264}
   m_Father: {fileID: 680695327}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -47836,6 +47854,8 @@ MonoBehaviour:
   jumpAttackVelocity: {x: 5, y: -6}
   attackVelocityDuration: 0.1
   comboResetTime: 0.5
+  riseSpeed: 25
+  riseMaxDistance: 3
   moveSpeed: 8
   jumpForce: 12
   wallJumpForce: {x: 8, y: 12}
@@ -49042,10 +49062,10 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1818685011}
-  - {fileID: 2057386914}
   - {fileID: 1967308230}
   - {fileID: 670465333}
   - {fileID: 1151205980}
+  - {fileID: 2057386914}
   m_Father: {fileID: 680695327}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}

@@ -22,6 +22,7 @@ public class Player_DomainExpansionState : PlayerState
         maxDistanceToGoUp = GetAvalibaleRiseDistance();
 
         player.SetVelocity(0, player.riseSpeed);
+        player.health.SetCanTakeDamage(false);
     }
 
     public override void Update()
@@ -34,18 +35,23 @@ public class Player_DomainExpansionState : PlayerState
         if(isLevitating)
         {
             //skill mamager case spells
+            skillManager.domainExpansion.DoSpellCasting();
 
             if (stateTimer < 0)
+            {
+                rb.gravityScale = originalGravity;
+                isLevitating = false;
                 stateMachine.ChangeState(player.idleState);
+            }
         }
     }
 
     public override void Exit()
     {
         base.Exit();
-        rb.gravityScale = originalGravity;
-        isLevitating = false;
         createdDomain = false;
+        player.health.SetCanTakeDamage(true);
+
     }
 
     private void Levitate()
@@ -54,7 +60,7 @@ public class Player_DomainExpansionState : PlayerState
         rb.linearVelocity = Vector2.zero;
         rb.gravityScale = 0;
 
-        stateTimer = 2;
+        stateTimer = skillManager.domainExpansion.GetDomainDuration();
         //getlevitation duration
         if(createdDomain == false)
         {

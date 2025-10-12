@@ -22,7 +22,7 @@ public class Enemy_BattleState : EnemyState
 
         if (ShouldRetreat())
             {
-                rb.linearVelocity = new Vector2(enemy.retreatVelocity.x * -DirecionToPlayer(), enemy.retreatVelocity.y);
+                rb.linearVelocity = new Vector2((enemy.retreatVelocity.x * enemy.activeSlowMultiplier) * -DirecionToPlayer(), enemy.retreatVelocity.y);
                 enemy.HandleFlip(DirecionToPlayer());
             }
 
@@ -44,7 +44,7 @@ public class Enemy_BattleState : EnemyState
         if (WithInAttackRange() && enemy.PlayerDetected())
             stateMachine.ChangeState(enemy.attackState);
         else
-            enemy.SetVelocity(enemy.battleMoveSpeed * DirecionToPlayer(), rb.linearVelocityY);
+            enemy.SetVelocity(enemy.GetBattleMoveSpeed() * DirecionToPlayer(), rb.linearVelocityY);
     }
     
     private void UpdateTargetIfNeeded()

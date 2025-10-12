@@ -18,7 +18,7 @@ public class Enemy_MoveState : Enemy_GroundedState
     {
         base.Update();
 
-        enemy.SetVelocity(enemy.moveSpeed * enemy.facingDir, rb.linearVelocityY);
+        enemy.SetVelocity(enemy.GetMoveSpeed() * enemy.facingDir, rb.linearVelocityY);
 
         if (!enemy.groundDetected || enemy.wallDetected)
         {

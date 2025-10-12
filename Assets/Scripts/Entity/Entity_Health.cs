@@ -11,7 +11,9 @@ public class Entity_Health : MonoBehaviour, IDamageable
     private Entity_Stats entityStats;
 
     [SerializeField] protected float currentHealth;
-    [SerializeField] protected bool isDead;
+    public bool isDead { get; private set; }
+    protected bool canTakeDamage = true;
+
     [Header("Health regen")]
     [SerializeField] private float regenInterval = 1;
     [SerializeField] private bool canRegenerateHealth = true;
@@ -45,9 +47,9 @@ public class Entity_Health : MonoBehaviour, IDamageable
         InvokeRepeating(nameof(RegenerateHealth), 0, regenInterval);
     }
 
-    public virtual bool TakeDamage(float damage,float elementalDamage,ElementType element, Transform damageDealer)
+    public virtual bool TakeDamage(float damage, float elementalDamage, ElementType element, Transform damageDealer)
     {
-        if (isDead)
+        if (isDead || canTakeDamage == false)
             return false;
 
         if (AttackEvaded())
@@ -65,15 +67,17 @@ public class Entity_Health : MonoBehaviour, IDamageable
         float physicalDamageTaken = damage * (1 - mitigation);
 
         float elementDamageTaken = elementalDamage * (1 - resistance);
-        
+
 
         TakeKnockBack(physicalDamageTaken, damageDealer);
         ReduceHealth(physicalDamageTaken + elementDamageTaken);
 
         lastDamageTaken = physicalDamageTaken + elementDamageTaken;
-        
+
         return true;
     }
+
+    public void SetCanTakeDamage(bool canTakeDamage) => this.canTakeDamage = canTakeDamage;
 
     private bool AttackEvaded()
     {

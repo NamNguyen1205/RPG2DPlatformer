@@ -18,7 +18,7 @@ public class UI_TreeNode : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
 
     [Header("Skill details")]
-    public Skill_DataSO skillData;
+    public SkillDataSO skillData;
     [SerializeField] private string skillName;
 
     [SerializeField] private Image skillIcon;

@@ -1,12 +1,15 @@
 using TMPro;
+using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler
+public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public Inventory_Item itemInSlot { get; private set; }
     protected Inventory_Player inventory;
+    protected UI ui;
+    protected RectTransform rect;
 
     [Header("UI slot setup")]
     [SerializeField] private Image itemIcon;
@@ -14,15 +17,20 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler
 
     protected void Awake()
     {
+        ui = GetComponentInParent<UI>();
+        rect = GetComponent<RectTransform>();
         inventory = FindAnyObjectByType<Inventory_Player>();
     }
 
     public virtual void OnPointerDown(PointerEventData eventData)
     {
-        if (itemInSlot == null)
+        if (itemInSlot == null || itemInSlot.itemData.itemType == ItemType.Material)
             return;
 
         inventory.TryEquipItem(itemInSlot);
+
+        if(itemInSlot == null)
+            ui.itemToolTip.ShowToolTip(false, null);
     }
 
     public void UpdateSlot(Inventory_Item item)
@@ -41,6 +49,16 @@ public class UI_ItemSlot : MonoBehaviour, IPointerDownHandler
         itemIcon.sprite = itemInSlot.itemData.itemIcon;
         itemStackSize.text = item.stackSize > 1 ? item.stackSize.ToString() : "";
     }
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (itemInSlot == null) return;
 
-    
+        ui.itemToolTip.ShowToolTip(true, rect, itemInSlot);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        ui.itemToolTip.ShowToolTip(false, null);
+    }
+
 }
